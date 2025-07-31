@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JOIN OUR TELEGRAM CHANNEL</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      overflow: hidden;
+    }
+    #video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #fullscreen-video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    #content {
+      display: none;
+    }
+    .logo-container {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 30px;
+      border: 3px solid #00ff88;
+    }
+    .logo-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .join-btn {
+      padding: 25px 60px;
+      font-size: 28px;
+      font-weight: 900;
+      color: #000;
+      background: linear-gradient(135deg, #00ff88, #00ccff);
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      margin: 40px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 10px 30px rgba(0, 255, 200, 0.5);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .join-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 40px rgba(0, 255, 200, 0.7);
+    }
+    .join-btn:active {
+      transform: scale(0.98);
+    }
+    .join-btn::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255,255,255,0.3) 0%,
+        rgba(255,255,255,0) 60%
+      );
+      transform: rotate(30deg);
+      transition: all 0.3s ease;
+    }
+    .join-btn:hover::after {
+      left: 100%;
+      top: 100%;
+    }
+    .countdown {
+      font-size: 16px;
+      color: #aaa;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="video-container">
+    <video id="fullscreen-video" autoplay playsinline>
+      <source src="https://files.catbox.moe/39m0nr.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div id="content">
+    <div class="logo-container">
+      <video autoplay muted loop playsinline class="logo-video">
+        <source src="https://files.catbox.moe/fswqj2.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <button class="join-btn" onclick="redirectToTelegram()">
+      JOIN NOW
+    </button>
+
+    <div class="countdown" id="countdown">
+      Auto-join in <span id="countdownNumber">3</span> seconds
+    </div>
+  </div>
+
+  <script>
+    // Elements
+    const fullscreenVideo = document.getElementById('fullscreen-video');
+    const videoContainer = document.getElementById('video-container');
+    const content = document.getElementById('content');
+    
+    // Try to play with sound automatically
+    function playVideoWithSound() {
+      fullscreenVideo.muted = false;
+      const playPromise = fullscreenVideo.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          // If sound fails, try muted
+          fullscreenVideo.muted = true;
+          fullscreenVideo.play();
+        });
+      }
+    }
+    
+    // When the video ends, show the content
+    fullscreenVideo.addEventListener('ended', function() {
+      videoContainer.style.display = 'none';
+      content.style.display = 'flex';
+      document.body.style.flexDirection = 'column';
+      
+      // Start countdown only after video ends
+      let countdown = 3;
+      const countdownInterval = setInterval(() => {
+        countdown--;
+        document.getElementById('countdownNumber').textContent = countdown;
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          redirectToTelegram();
+        }
+      }, 1000);
+    });
+
+    // Redirect function
+    function redirectToTelegram() {
+      const telegramLink = "https://telegram.me/+FqAWO5APkmoxY2U1";
+      if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        window.location.href = "tg://join?invite=FqAWO5APkmoxY2U1";
+        setTimeout(() => { window.location.href = telegramLink; }, 300);
+      } else {
+        window.location.href = telegramLink;
+      }
+    }
+    
+    // Start the video when page loads
+    document.addEventListener('DOMContentLoaded', playVideoWithSound);
+    
+    // Also try to play when the window gains focus (might help on some mobile devices)
+    window.addEventListener('focus', playVideoWithSound);
+  </script>
+</body>
+</html>
